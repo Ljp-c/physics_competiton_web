@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Noto Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  background: #f5f5f5;
+  min-height: 100vh;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+/* Glass card effect - simplified */
+.glass-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  box-shadow: none;
+}
+
+.glass-card-dark {
+  background: white;
+  border: 1px solid #e5e7eb;
+  box-shadow: none;
+}
+
+/* Input styling */
+.data-input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #cbd5e1;
+  outline: none;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 4px 4px 4px 4px;
+  width: 100%;
+  transition: border-color 0.2s;
+  color: #1e293b;
+}
+
+.data-input:focus {
+  border-bottom-color: #6366f1;
+  box-shadow: none;
+}
+
+.data-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.data-input-filled {
+  border-bottom-color: #10b981;
+}
+
+.input-disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-bottom-color: #d1d5db;
+}
+
+.input-disabled:focus {
+  border-bottom-color: #d1d5db;
+  box-shadow: none;
+}
+
+/* Result input */
+.result-input {
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  outline: none;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 6px 8px;
+  width: 100%;
+  transition: border-color 0.2s;
+  color: #1e293b;
+}
+
+.result-input:focus {
+  background: #fafafa;
+  border-color: #bfdbfe;
+  box-shadow: none;
+}
+
+.result-input:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #d1d5db;
+}
+
+/* Subscript / superscript helpers */
+.formula {
+  font-family: 'Times New Roman', 'Noto Sans SC', serif;
+  font-style: italic;
+}
+
+.formula-label {
+  font-family: 'Times New Roman', 'Noto Sans SC', serif;
+  font-size: 1rem;
+  color: #475569;
+  line-height: 1.8;
+}
+
+/* Subtle animation on cards */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Section badge - kept for compatibility but simplified styling */
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: transparent;
+  color: inherit;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+/* Grid label cells */
+.grid-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #6366f1;
+  font-weight: 600;
+  padding: 2px;
+}
