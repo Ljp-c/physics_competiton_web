@@ -813,28 +813,92 @@ export default function App() {
     setForm2((prev) => {
       const newForm = { ...prev, [key]: v };
 
-      // Auto-calculate dependent fields when frequency changes
-      if (key === "f" && prev.autoCalculateEnabled) {
-        newForm.vBar = calculateVBar(newForm.f, newForm.lambdaBar);
-        newForm.uvRatio = calculateUVRatio(
-          newForm.f,
-          newForm.uf,
-          newForm.lambdaBar,
-          newForm.uLambda
-        );
-        newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
-        newForm.A = calculateRelativeError(newForm.vBar);
-      }
+      if (prev.autoCalculateEnabled) {
+        // f 改变 → 更新相关字段
+        if (key === "f") {
+          newForm.vBar = calculateVBar(newForm.f, newForm.lambdaBar);
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
 
-      // Auto-calculate when uf changes
-      if (key === "uf" && prev.autoCalculateEnabled) {
-        newForm.uvRatio = calculateUVRatio(
-          newForm.f,
-          newForm.uf,
-          newForm.lambdaBar,
-          newForm.uLambda
-        );
-        newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+        // uf 改变 → 更新相关字段
+        if (key === "uf") {
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+        }
+
+        // deltaLBar 改变 → 更新：lambdaBar、vBar、uvRatio、uv、A
+        if (key === "deltaLBar") {
+          newForm.lambdaBar = calculateLambdaBar(newForm.deltaLBar);
+          newForm.vBar = calculateVBar(newForm.f, newForm.lambdaBar);
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
+
+        // uDeltaL 改变 → 更新：uLambda、uvRatio、uv
+        if (key === "uDeltaL") {
+          newForm.uLambda = calculateULambda(newForm.uDeltaL);
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+        }
+
+        // lambdaBar 改变 → 更新：vBar、uvRatio、uv、A
+        if (key === "lambdaBar") {
+          newForm.vBar = calculateVBar(newForm.f, newForm.lambdaBar);
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
+
+        // uLambda 改变 → 更新：uvRatio、uv
+        if (key === "uLambda") {
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+        }
+
+        // vBar 改变 → 更新：uvRatio、uv、A
+        if (key === "vBar") {
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
       }
 
       return newForm;
@@ -919,28 +983,92 @@ export default function App() {
     setForm3((prev) => {
       const newForm = { ...prev, [key]: v };
 
-      // Auto-calculate dependent fields when frequency changes
-      if (key === "f" && prev.autoCalculateEnabled) {
-        newForm.vBar = calculateVBar(newForm.f, newForm.lambdaBar);
-        newForm.uvRatio = calculateUVRatio(
-          newForm.f,
-          newForm.uf,
-          newForm.lambdaBar,
-          newForm.uLambda
-        );
-        newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
-        newForm.A = calculateRelativeError(newForm.vBar);
-      }
+      if (prev.autoCalculateEnabled) {
+        // f 改变 → 更新相关字段
+        if (key === "f") {
+          newForm.vBar = calculateVBar(newForm.f, newForm.lambdaBar);
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
 
-      // Auto-calculate when uf changes
-      if (key === "uf" && prev.autoCalculateEnabled) {
-        newForm.uvRatio = calculateUVRatio(
-          newForm.f,
-          newForm.uf,
-          newForm.lambdaBar,
-          newForm.uLambda
-        );
-        newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+        // uf 改变 → 更新相关字段
+        if (key === "uf") {
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+        }
+
+        // deltaLBar 改变 → 更新：lambdaBar、vBar、uvRatio、uv、A
+        if (key === "deltaLBar") {
+          newForm.lambdaBar = calculateLambdaBar(newForm.deltaLBar);
+          newForm.vBar = calculateVBar(newForm.f, newForm.lambdaBar);
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
+
+        // uDeltaL 改变 → 更新：uLambda、uvRatio、uv
+        if (key === "uDeltaL") {
+          newForm.uLambda = calculateULambda(newForm.uDeltaL);
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+        }
+
+        // lambdaBar 改变 → 更新：vBar、uvRatio、uv、A
+        if (key === "lambdaBar") {
+          newForm.vBar = calculateVBar(newForm.f, newForm.lambdaBar);
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
+
+        // uLambda 改变 → 更新：uvRatio、uv
+        if (key === "uLambda") {
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+        }
+
+        // vBar 改变 → 更新：uvRatio、uv、A
+        if (key === "vBar") {
+          newForm.uvRatio = calculateUVRatio(
+            newForm.f,
+            newForm.uf,
+            newForm.lambdaBar,
+            newForm.uLambda
+          );
+          newForm.uv = calculateUV(newForm.vBar, newForm.uvRatio);
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
       }
 
       return newForm;
@@ -1066,11 +1194,19 @@ export default function App() {
       const newForm = { ...prev, [key]: v };
 
       if (prev.autoCalculateEnabled) {
-        newForm.vBar = calculateVBarTime(
-          newForm.deltaLBar,
-          newForm.deltaTBar
-        );
-        newForm.A = calculateRelativeError(newForm.vBar);
+        // deltaLBar 或 deltaTBar 改变 → 更新：vBar、A
+        if (key === "deltaLBar" || key === "deltaTBar") {
+          newForm.vBar = calculateVBarTime(
+            newForm.deltaLBar,
+            newForm.deltaTBar
+          );
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
+
+        // vBar 改变 → 更新：A
+        if (key === "vBar") {
+          newForm.A = calculateRelativeError(newForm.vBar);
+        }
       }
 
       return newForm;
