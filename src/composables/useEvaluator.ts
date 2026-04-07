@@ -39,12 +39,16 @@ export function useEvaluator() {
       isLoading.value = true;
       currentResult.value = "";
 
+      const abortController = new AbortController();
+      const timeoutId = setTimeout(() => abortController.abort(), 10000);
+
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
+          signal: abortController.signal,
           body: JSON.stringify({
             teacher_type: 'data_eval',
             messages: [
@@ -53,37 +57,55 @@ export function useEvaluator() {
                 content: `这是我录入的特定测点数据：${cellId} = ${value} mm，请给出评价。`
               }
             ],
-            stream: false
+            stream: true
           })
         });
+
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           const errData = await response.json().catch(() => ({}));
           throw new Error(`API Request failed with status ${response.status}: ${errData.detail || response.statusText}`);
         }
 
-        const data = await response.json();
-        let resultText = data.response;
-        
-        // 由于后端可能返回了JSON Schema约束的结构化输出，尝试解析它
-        try {
-           const parsed = JSON.parse(resultText);
-           if (parsed.evaluation) {
-               resultText = parsed.evaluation;
-           } else if (parsed.message) {
-               resultText = parsed.message;
-           }
-        } catch (e) {
-           // 不是 JSON 格式，保留原文
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error("Response body is null");
+
+        const decoder = new TextDecoder();
+        let aggregatedText = "";
+
+        while (true) {
+          const { done, value: chunk } = await reader.read();
+          if (done) break;
+
+          const chunkText = decoder.decode(chunk);
+          const lines = chunkText.split('\n');
+
+          for (const line of lines) {
+            const trimmedLine = line.trim();
+            if (!trimmedLine || trimmedLine === 'data: [DONE]') continue;
+            
+            if (trimmedLine.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(trimmedLine.slice(6));
+                const content = data.choices?.[0]?.delta?.content || "";
+                aggregatedText += content;
+                currentResult.value = aggregatedText;
+              } catch (e) {
+                // Ignore parsing errors for partial chunks
+              }
+            }
+          }
         }
-        
-        resultText = resultText || "老师看过了，但没有给出具体反馈。";
-        
-        currentResult.value = resultText;
-        evalCache.set(cacheKey, resultText);
+
+        evalCache.set(cacheKey, aggregatedText);
       } catch (err: any) {
-        console.error("Evaluation Error:", err);
-        error.value = `请求老师评价失败: ${err.message || err}`;
+        if (err.name === 'AbortError') {
+          error.value = "请求超时 (10s)，请稍后再试。";
+        } else {
+          console.error("Evaluation Error:", err);
+          error.value = `请求老师评价失败: ${err.message || err}`;
+        }
       } finally {
         isLoading.value = false;
       }
